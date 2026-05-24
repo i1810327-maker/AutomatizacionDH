@@ -1,24 +1,27 @@
 ## Why
 
-Se necesita un sistema donde la Directora escolar gestione reportes académicos enviados por Docentes. El flujo completo permite: cargar usuarios desde Excel, autenticación por rol (Directora/Docente), envío de reportes (PDF/Word), revisión con aprobación o rechazo, y notificación automática por correo (Gmail API) al rechazar un reporte con comentarios.
+Sistema donde la Directora escolar gestiona reportes académicos. El flujo inicia con la Directora creando solicitudes de reporte con fechas límite, el sistema notifica internamente a los Docentes, ellos suben sus reportes (PDF/Word), y la Directora los revisa: si cumplen los archiva, si no, envía correo de rechazo con comentarios al Docente.
 
 ## What Changes
 
 - Cargar usuarios desde un Excel (correo, clave, rol) a MySQL — seed inicial
-- Login con correo y contraseña, redirigiendo al panel según el rol
-- Panel Docente: formulario para enviar reporte (título + descripción + archivo PDF/Word)
-- Panel Directora: lista de reportes pendientes, aprobar o rechazar con comentarios
-- Al rechazar: enviar correo automático al Docente con los comentarios vía Gmail API
-- Gestionar archivos subidos en el sistema de archivos local
+- Login con correo y contraseña, redirección por rol
+- Directora: crear solicitudes de reporte con fecha límite
+- Directora: notificar internamente a todos los docentes sobre una solicitud
+- Docente: ver solicitudes pendientes y enviar reporte vinculado a una solicitud
+- Directora: ver reportes, descargar archivo, archivar (si cumple) o rechazar con comentarios
+- Al rechazar: correo automático al Docente vía Gmail API
 
 ## Capabilities
 
 ### New Capabilities
-- `excel-seed`: Carga de usuarios desde Excel a MySQL con contraseñas hasheadas
-- `auth-login`: Autenticación por correo y contraseña, redirección por rol
-- `report-submission`: Docente envía reporte con título, descripción y archivo adjunto
-- `report-review`: Directora revisa, aprueba o rechaza reportes con comentarios
-- `email-notification`: Envío automático de correos vía Gmail API al rechazar un reporte
+- `excel-seed`: Carga de usuarios desde Excel a MySQL
+- `auth-login`: Autenticación por correo y contraseña
+- `solicitudes`: Directora crea solicitudes de reporte con fechas
+- `notificaciones`: Sistema notifica internamente a docentes
+- `report-submission`: Docente envía reporte vinculado a una solicitud
+- `report-review`: Directora archiva o rechaza reportes
+- `email-notification`: Correo automático al rechazar
 
 ### Modified Capabilities
 
@@ -26,8 +29,6 @@ Se necesita un sistema donde la Directora escolar gestione reportes académicos 
 
 ## Impact
 
-- `main.py`: Reestructuración completa con routers, login, paneles
-- `pyproject.toml`: Nuevas dependencias: `openpyxl`, `mysql-connector` o `aiomysql`, `python-jose` (JWT), `passlib` (hash), `python-multipart`
-- Base de datos MySQL con tablas: usuarios, reportes
-- Archivos subidos en directorio local (`uploads/`)
-- Credenciales Gmail API para envío de correos
+- `app/database.py`: Nuevas tablas `solicitudes` y `notificaciones`, campo `solicitud_id` en reportes
+- `app/routers/directora.py`: Endpoints de solicitudes + notificar + archivar
+- `app/routers/docente.py`: Ver solicitudes + ver notificaciones + enviar reporte vinculado

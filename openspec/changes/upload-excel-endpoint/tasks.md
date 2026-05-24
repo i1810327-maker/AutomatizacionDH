@@ -1,50 +1,57 @@
 ## 1. Setup y Dependencias
 
-- [x] 1.1 Agregar dependencias a `pyproject.toml`: `openpyxl`, `mysql-connector-python` (o `aiomysql`), `python-jose[cryptography]`, `passlib[bcrypt]`, `python-multipart`, `google-api-python-client`, `google-auth-httplib2`, `google-auth-oauthlib`
+- [x] 1.1 Agregar dependencias a `pyproject.toml`
 - [x] 1.2 Ejecutar `uv lock` para instalar dependencias
-- [x] 1.3 Crear directorio `uploads/` para archivos subidos
+- [x] 1.3 Crear directorio `uploads/`
 
 ## 2. Base de Datos MySQL
 
-- [x] 2.1 Crear base de datos y tablas (usuarios, reportes) en MySQL vía script SQL
-- [x] 2.2 Configurar conexión desde FastAPI a MySQL
+- [x] 2.1 Crear base de datos y tablas
+- [x] 2.2 Configurar conexión
+- [x] 2.3 Agregar tablas `solicitudes`, `notificaciones` y `solicitud_id`
 
-## 3. Seed de Usuarios desde Excel
+## 3. Seed de Usuarios
 
-- [x] 3.1 Crear endpoint `POST /seed/` que recibe Excel y parsea con openpyxl
-- [x] 3.2 Validar columnas requeridas (Correo, Clave, Rol)
-- [x] 3.3 Hashear contraseñas con passlib/bcrypt e insertar en MySQL
+- [x] 3.1 Endpoint `POST /seed/`
+- [x] 3.2 Validar columnas
+- [x] 3.3 Hash + insertar
 
 ## 4. Autenticación JWT
 
-- [x] 4.1 Crear endpoint `POST /login/` que valida credenciales contra MySQL
-- [x] 4.2 Generar token JWT con correo y rol
-- [x] 4.3 Crear dependencia de FastAPI para proteger rutas según rol
+- [x] 4.1 `POST /login/`
+- [x] 4.2 Token JWT
+- [x] 4.3 Dependencia por rol
 
-## 5. Panel Docente — Envío de Reportes
+## 5. Solicitudes (Directora)
 
-- [x] 5.1 Crear endpoint `POST /reportes/` que recibe título, descripción y archivo
-- [x] 5.2 Validar tipo de archivo (PDF o Word)
-- [x] 5.3 Guardar archivo en `uploads/` con nombre único
-- [x] 5.4 Insertar reporte en MySQL con estado "pendiente"
-- [x] 5.5 Crear endpoint `GET /reportes/mis-reportes` para listar propios
+- [x] 5.1 `POST /directora/solicitudes/` — crear solicitud con fecha límite
+- [x] 5.2 `GET /directora/solicitudes/` — listar solicitudes
+- [x] 5.3 `POST /directora/solicitudes/{id}/notificar` — notificar a docentes
 
-## 6. Panel Directora — Revisión
+## 6. Notificaciones Internas
 
-- [x] 6.1 Crear endpoint `GET /directora/reportes/` para listar pendientes
-- [x] 6.2 Crear endpoint `PUT /directora/reportes/{id}/aprobar`
-- [x] 6.3 Crear endpoint `PUT /directora/reportes/{id}/rechazar` con comentarios requeridos
+- [x] 6.1 `GET /docente/notificaciones/` — ver notificaciones
+- [x] 6.2 `PUT /docente/notificaciones/{id}/leer` — marcar leída
 
-## 7. Notificaciones por Correo (Gmail API)
+## 7. Panel Docente
 
-- [x] 7.1 Configurar autenticación Gmail API con credentials.json
-- [x] 7.2 Implementar función de envío de correo al rechazar reporte
-- [x] 7.3 Integrar en el flujo de rechazo (paso 6.3)
+- [x] 7.1 `POST /reportes/` con `solicitud_id`
+- [x] 7.2 Validar tipo archivo
+- [x] 7.3 Guardar en `uploads/`
+- [x] 7.4 Insertar reporte vinculado
+- [x] 7.5 `GET /docente/solicitudes/` — ver solicitudes pendientes
+- [x] 7.6 `GET /reportes/mis-reportes/`
 
-## 8. Verificación del Flujo Completo
+## 8. Panel Directora — Revisión
 
-- [x] 8.1 Iniciar servidor y verificar que arranca sin errores
-- [x] 8.2 Seed de usuarios desde Excel
-- [x] 8.3 Login como Docente y envío de reporte
-- [x] 8.4 Login como Directora, ver reportes, aprobar uno
-- [x] 8.5 Rechazar otro reporte con comentarios — correo pendiente de autorizar Gmail API
+- [x] 8.1 `GET /directora/reportes/` — listar pendientes
+- [x] 8.2 `GET /directora/reportes/{id}/descargar`
+- [x] 8.3 `PUT .../archivar` — reporte archivado
+- [x] 8.4 `PUT .../rechazar` + comentarios + correo automático
+
+## 9. Verificación
+
+- [x] 9.1 Directora crea solicitud y notifica
+- [x] 9.2 Docente ve solicitud y envía reporte
+- [x] 9.3 Directora archiva o rechaza
+- [x] 9.4 Correo al rechazar

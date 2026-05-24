@@ -6,17 +6,17 @@ Proyecto FastAPI minimalista con una sola ruta (`GET /`). Sin base de datos, sin
 
 **Goals:**
 - Seed de usuarios desde Excel a MySQL con contraseñas hasheadas
-- Login con JWT, panel según rol (Directora / Docente)
-- Docente: enviar reporte con título, descripción y archivo
-- Directora: ver reportes, aprobar o rechazar con comentarios
-- Al rechazar: correo automático al Docente vía Gmail API
+- Login con JWT, panel según rol
+- Directora: crear solicitudes de reporte con fecha límite
+- Directora: notificar internamente a todos los docentes
+- Docente: ver solicitudes y enviar reporte vinculado a una solicitud
+- Directora: archivar reportes que cumplen, rechazar con comentarios + correo
 - Probar el flujo completo exitosamente
 
 **Non-Goals:**
-- Interfaz gráfica elaborada (API + HTML mínimo o solo API)
+- Interfaz gráfica elaborada (API sola)
 - Recuperación de contraseña
 - Edición de usuarios
-- Notificaciones al aprobar (solo al rechazar)
 
 ## Decisions
 
