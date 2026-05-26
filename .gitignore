@@ -9,5 +9,6 @@ wheels/
 # Virtual environments
 .venv
 
-# Gmail API token
+# Gmail API
+credentials.json
 token.json
